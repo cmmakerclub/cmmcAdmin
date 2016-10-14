@@ -13,12 +13,16 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "babel-plugin-transform-export-extensions": "^6.8.0",
     "bulma": "^0.2.1",
     "font-awesome": "^4.6.3",
     "node-sass": "^3.10.1",
     "sass-loader": "^4.0.2",
     "vue": "^2.0.1",
+    "vue-bulma-expanding": "^0.0.0",
+    "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
+    "vue-template-compiler": "^2.0.3",
     "vuex": "^2.0.0"
   },
   "devDependencies": {

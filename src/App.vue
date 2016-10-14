@@ -1,70 +1,60 @@
 <template>
-  <div id="app">
-    <img class="logo" src="./assets/logo.png">
-    <hello></hello>
-    <p>
-      Welcome to your Vue.js app!
-    </p>
-    <p>
-      To get a better understanding of how this boilerplate works, check out
-      <a href="http://vuejs-templates.github.io/webpack" target="_blank">its documentation</a>.
-      It is also recommended to go through the docs for
-      <a href="http://webpack.github.io/" target="_blank">Webpack</a> and
-      <a href="http://vuejs.github.io/vue-loader/" target="_blank">vue-loader</a>.
-      If you have any issues with the setup, please file an issue at this boilerplate's
-      <a href="https://github.com/vuejs-templates/webpack" target="_blank">repository</a>.
-    </p>
-    <p>
-      You may also want to checkout
-      <a href="https://github.com/vuejs/vue-router/" target="_blank">vue-router</a> for routing and
-      <a href="https://github.com/vuejs/vuex/" target="_blank">vuex</a> for state management.
-    </p>
+  <div>
+    <navbar></navbar>
+    <section class="app-main">
+      <div class="container is-fluid is-marginless">
+        <div class="columns is-mobile is-marginless">
+          <div class="column is-1 app-sidebar">
+            <sidebar></sidebar>
+          </div>
+          <div class="column is-offset-1 app-content">
+            <levelbar></levelbar>
+            <router-view keep-alive></router-view>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-  import Hello from './components/Hello'
+  import store from './vuex/store'
+  import Navbar from './components/Navbar'
+  import Sidebar from './components/Sidebar'
+  import Levelbar from './components/Levelbar'
 
   export default {
+    store,
+    computed: {
+      sidebar () {
+        console.log('in sidebar computed')
+        return this.$store.state.sidebar
+      }
+    },
     components: {
-      Hello
+      Navbar,
+      Sidebar,
+      Levelbar
     }
   }
 </script>
 
-<style>
-  html {
-    height: 100%;
-  }
-
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  #app {
-    color: #2c3e50;
-    margin-top: -100px;
-    max-width: 600px;
-    font-family: Source Sans Pro, Helvetica, sans-serif;
-    text-align: center;
-  }
-
-  #app a {
-    color: #42b983;
-    text-decoration: none;
-  }
-
-  .logo {
-    width: 100px;
-    height: 100px
-  }
-</style>
-
 <style lang="scss">
-  @import '~bulma';
-  $fa-font-path: '~font-awesome/fonts/';
-  @import '~font-awesome/scss/font-awesome';
+  @import 'assets/scss/app';
+  .app-main {
+    padding-top: 50px;
+  }
+
+  .app-sidebar {
+    padding: 20px 0px;
+    position: fixed;
+    height: 100%;
+    z-index: 1024 - 1;
+    background: #FFF;
+    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
+  }
+
+  .app-content {
+    padding: 20px;
+  }
 </style>
