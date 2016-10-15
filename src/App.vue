@@ -31,6 +31,7 @@
           config.sidebar = !config.mobile
         }
       }
+
       document.addEventListener('visibilitychange', handler)
       window.addEventListener('DOMContentLoaded', handler)
       window.addEventListener('resize', handler)
@@ -49,5 +50,6 @@
 
   $fa-font-path: '~font-awesome/fonts/';
   @import '~font-awesome/scss/font-awesome';
+
 
 </style>

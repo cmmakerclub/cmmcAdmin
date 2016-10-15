@@ -10,7 +10,7 @@
         <div class="nav-center">
           <a class="nav-item hero-brand" href="/">
             <div class="is-hidden-mobile">
-              <span class="vue">Vue</span><strong class="admin">Admin</strong>
+              <span class="vue">CMMC</span><strong class="admin">Admin</strong>
             </div>
           </a>
         </div>
@@ -44,7 +44,6 @@ export default {
   }
 
   .nav-right {
-    align-items: stretch;
     align-items: stretch;
     flex: 1;
     justify-content: flex-end;
