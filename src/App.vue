@@ -1,60 +1,54 @@
 <template>
-  <div>
-    <navbar></navbar>
-    <section class="app-main">
-      <div class="container is-fluid is-marginless">
-        <div class="columns is-mobile is-marginless">
-          <div class="column is-1 app-sidebar">
-            <sidebar></sidebar>
-          </div>
-          <div class="column is-offset-1 app-content">
-            <levelbar></levelbar>
-            <router-view keep-alive></router-view>
-          </div>
-        </div>
-      </div>
-    </section>
+  <div id="app">
+    <navbar :show="true"></navbar>
+    <sidebar :show="config.sidebar"></sidebar>
+    <app-main></app-main>
+    <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
-  import store from './vuex/store'
-  import Navbar from './components/Navbar'
-  import Sidebar from './components/Sidebar'
-  import Levelbar from './components/Levelbar'
+  import { Navbar, Sidebar, AppMain, FooterBar } from 'components/layout/'
 
   export default {
-    store,
-    computed: {
-      sidebar () {
-        console.log('in sidebar computed')
-        return this.$store.state.sidebar
-      }
-    },
     components: {
       Navbar,
       Sidebar,
-      Levelbar
+      AppMain,
+      FooterBar
+    },
+
+    beforeMount () {
+      const config = this.config
+      const { body } = document
+      const WIDTH = 768
+      const RATIO = 3
+
+      const handler = () => {
+        if (!document.hidden) {
+          let rect = body.getBoundingClientRect()
+          config.mobile = rect.width - RATIO < WIDTH
+          config.sidebar = !config.mobile
+        }
+      }
+
+      document.addEventListener('visibilitychange', handler)
+      window.addEventListener('DOMContentLoaded', handler)
+      window.addEventListener('resize', handler)
+    },
+
+    computed: {
+      config () {
+        return this.$store.state.config
+      }
     }
   }
 </script>
 
 <style lang="scss">
-  @import 'assets/scss/app';
-  .app-main {
-    padding-top: 50px;
-  }
+  @import '~bulma';
 
-  .app-sidebar {
-    padding: 20px 0px;
-    position: fixed;
-    height: 100%;
-    z-index: 1024 - 1;
-    background: #FFF;
-    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
-  }
+  $fa-font-path: '~font-awesome/fonts/';
+  @import '~font-awesome/scss/font-awesome';
 
-  .app-content {
-    padding: 20px;
-  }
 </style>

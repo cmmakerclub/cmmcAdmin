@@ -1,53 +1,34 @@
 import Vue from 'vue'
-import Router from 'vue-router'
 import Resource from 'vue-resource'
+import { sync } from 'vuex-router-sync'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import * as filters from './filters'
 
-import init from './init'
-import config from './config'
-import store from './vuex/store'
-
-init(config)
-
-Vue.use(Router)
 Vue.use(Resource)
 
-import App from './App'
-import Dashboard from './components/pages/Dashboard/'
-import ChartJs from './components/pages/Charts/ChartJs'
+sync(store, router)
 
-const { sidebar } = config
-const router = new Router({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    {path: '/', component: App},
-    {path: '/dashboard', name: 'Dashboard', component: Dashboard},
-    {path: '/charts/ChartJs', name: 'ChartJs', component: ChartJs}
-  ]
-})
+const { state } = store
+const { config } = state
 
-router.beforeEach((to, from, next) => {
-  console.log('router:beforeEach')
-  console.log(sidebar)
-  if (sidebar.isMobile && sidebar.opened) {
-    sidebar.opened = false
+router.beforeEach((route, redirect, next) => {
+  if (config.mobile && config.sidebar) {
+    config.sidebar = false
   }
   next()
 })
 
-// router.start(App, 'app')
-/* eslint-disable no-new */
-// new Vue({
-//   router: router,
-//   el: 'body',
-//   components: {App}
-// })
-
-// new Vue(Vue.util.extend({ router }, App), store).$mount('#app')
-new Vue({
-  router,
-  store, // inject store to all children
-  el: '#app',
-  render: h => h(App)
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
 })
 
+const app = new Vue({
+  router,
+  store,
+  ...App
+})
+
+app.$mount('#app')
+export { app, router, store }

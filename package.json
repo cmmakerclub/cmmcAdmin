@@ -19,11 +19,15 @@
     "node-sass": "^3.10.1",
     "sass-loader": "^4.0.2",
     "vue": "^2.0.1",
+    "vue-bulma-breadcrumb": "^1.0.0",
+    "vue-bulma-chartjs": "^1.0.0",
     "vue-bulma-expanding": "^0.0.0",
+    "vue-canvas-gauges": "^0.0.0",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1",
     "vue-template-compiler": "^2.0.3",
-    "vuex": "^2.0.0"
+    "vuex": "^2.0.0",
+    "vuex-router-sync": "^3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
