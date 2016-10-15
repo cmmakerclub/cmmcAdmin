@@ -31,7 +31,6 @@
           config.sidebar = !config.mobile
         }
       }
-
       document.addEventListener('visibilitychange', handler)
       window.addEventListener('DOMContentLoaded', handler)
       window.addEventListener('resize', handler)
