@@ -35,143 +35,143 @@
 </template>
 
 <script>
-import Expanding from 'vue-bulma-expanding'
+    import Expanding from 'vue-bulma-expanding'
 
-export default {
-  components: {
-    Expanding
-  },
+    export default {
+      components: {
+        Expanding
+      },
 
-  props: {
-    show: Boolean
-  },
+      props: {
+        show: Boolean
+      },
 
-  data () {
-    return {
-      isReady: false
-    }
-  },
-
-  mounted () {
-    let route = this.$route
-    if (route.name) {
-      this.isReady = true
-      this.shouldExpandMatchItem(route)
-    }
-  },
-
-  computed: {
-    menu () {
-      return this.$store.state.menu
-    }
-  },
-
-  methods: {
-    isExpanded (item) {
-      return item.meta.expanded
-    },
-
-    toggle (item) {
-      item.meta.expanded = !item.meta.expanded
-    },
-
-    shouldExpandMatchItem (route) {
-      let matched = route.matched
-      let lastMatched = matched[matched.length - 1]
-      let parent = lastMatched.parent || lastMatched
-
-      if (parent === lastMatched) {
-        const p = this.findParentFromMenu(route)
-        if (p) {
-          parent = p
+      data () {
+        return {
+          isReady: false
         }
-      }
+      },
 
-      if ('expanded' in parent.meta && parent !== lastMatched) {
-        parent.meta.expanded = true
-      }
-    },
+      mounted () {
+        let route = this.$route
+        if (route.name) {
+          this.isReady = true
+          this.shouldExpandMatchItem(route)
+        }
+      },
 
-    generatePath (item, subItem) {
-      return `${item.component ? item.path + '/' : ''}${subItem.path}`
-    },
+      computed: {
+        menu () {
+          return this.$store.state.menu
+        }
+      },
 
-    findParentFromMenu (route) {
-      const menu = this.menu
-      for (let i = 0, l = menu.length; i < l; i++) {
-        const item = menu[i]
-        const k = item.children && item.children.length
-        if (k) {
-          for (let j = 0; j < k; j++) {
-            if (item.children[j].name === route.name) {
-              return item
+      methods: {
+        isExpanded (item) {
+          return item.meta.expanded
+        },
+
+        toggle (item) {
+          item.meta.expanded = !item.meta.expanded
+        },
+
+        shouldExpandMatchItem (route) {
+          let matched = route.matched
+          let lastMatched = matched[matched.length - 1]
+          let parent = lastMatched.parent || lastMatched
+
+          if (parent === lastMatched) {
+            const p = this.findParentFromMenu(route)
+            if (p) {
+              parent = p
+            }
+          }
+
+          if ('expanded' in parent.meta && parent !== lastMatched) {
+            parent.meta.expanded = true
+          }
+        },
+
+        generatePath (item, subItem) {
+          return `${item.component ? item.path + '/' : ''}${subItem.path}`
+        },
+
+        findParentFromMenu (route) {
+          const menu = this.menu
+          for (let i = 0, l = menu.length; i < l; i++) {
+            const item = menu[i]
+            const k = item.children && item.children.length
+            if (k) {
+              for (let j = 0; j < k; j++) {
+                if (item.children[j].name === route.name) {
+                  return item
+                }
+              }
             }
           }
         }
+      },
+
+      watch: {
+        $route (route) {
+          this.isReady = true
+          this.shouldExpandMatchItem(route)
+        }
       }
-    }
-  },
 
-  watch: {
-    $route (route) {
-      this.isReady = true
-      this.shouldExpandMatchItem(route)
     }
-  }
-
-}
 </script>
 
 <style lang="scss">
-@import '~bulma/sass/utilities/variables';
-@import '~bulma/sass/utilities/mixins';
+    @import '~bulma/sass/utilities/variables';
+    @import '~bulma/sass/utilities/mixins';
 
-.app-sidebar {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  bottom: 0;
-  padding: 20px 0 50px;
-  width: 180px;
-  min-width: 45px;
-  max-height: 100vh;
-  height: calc(100% - 50px);
-  z-index: 1024 - 1;
-  background: #FFF;
-  box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
-  overflow-y: auto;
-  overflow-x: hidden;
+    .app-sidebar {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      bottom: 0;
+      padding: 20px 0 50px;
+      width: 180px;
+      min-width: 45px;
+      max-height: 100vh;
+      height: calc(100% - 50px);
+      z-index: 1024 - 1;
+      background: #FFF;
+      box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1), 0 0 0 1px rgba(17, 17, 17, 0.1);
+      overflow-y: auto;
+      overflow-x: hidden;
 
-  @include mobile() {
-    transform: translate3d(-180px, 0, 0);
-  }
+      @include mobile() {
+        transform: translate3d(-180px, 0, 0);
+      }
 
-  .icon {
-    vertical-align: baseline;
-    &.is-angle {
-      position: absolute;
-      right: 10px;
-      transition: transform .377s ease;
-    }
-  }
-
-  .menu-label {
-    padding-left: 5px;
-  }
-
-  .menu-list {
-    li a {
-      &[aria-expanded="true"] {
-        .is-angle {
-          transform: rotate(180deg);
+      .icon {
+        vertical-align: baseline;
+        &.is-angle {
+          position: absolute;
+          right: 10px;
+          transition: transform .377s ease;
         }
       }
-    }
 
-    li a + ul {
-      margin: 0 10px 0 15px;
-    }
-  }
+      .menu-label {
+        padding-left: 5px;
+      }
 
-}
+      .menu-list {
+        li a {
+          &[aria-expanded="true"] {
+            .is-angle {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        li a + ul {
+          margin: 0 10px 0 15px;
+        }
+      }
+
+    }
 </style>
