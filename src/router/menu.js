@@ -7,14 +7,6 @@
 // const lazyLoading = (name, index = false) => () => System.import(`views/${name}${index ? '/index' : ''}.vue`)
 
 export default [
-  // {
-  //   name: 'Dashboard',
-  //   path: '/dashboard',
-  //   meta: {
-  //     icon: 'fa-tachometer'
-  //   },
-  //   component: require('../views/dashboard')
-  // },
   {
     name: 'WiFi Configuration',
     path: '/wifi',
@@ -28,18 +20,18 @@ export default [
       {
         name: 'AP',
         path: 'ap',
-        component: require('../views/wifi/Form')
+        component: require('../views/wifi/AP')
       },
       {
         name: 'STA',
         path: 'sta',
-        component: require('../views/dashboard')
+        component: require('../views/wifi/STA')
       }
     ]
   },
   {
     name: 'Configurations',
-    path: '/ntp',
+    path: '/config',
     meta: {
       icon: 'fa-life-saver',
       expanded: false
@@ -55,12 +47,27 @@ export default [
         name: 'MQTT',
         path: 'mqtt',
         component: require('../views/wifi/Form')
-      },
-      {
-        name: 'Deep Sleep',
-        path: 'sleep',
-        component: require('../views/wifi/Form')
       }
     ]
+  },
+  {
+    name: 'OTA',
+    path: '/ota',
+    meta: {
+      icon: 'fa-bank',
+      expanded: false
+    },
+    component: require('../views/charts'),
+    children: []
+  },
+  {
+    name: 'Deep Sleep',
+    path: '/deep',
+    meta: {
+      icon: 'fa-beer',
+      expanded: false
+    },
+    component: require('../views/charts'),
+    children: [ ]
   }
 ]
