@@ -52,8 +52,8 @@
       return {
         loading: false,
         post: {},
-        selected: '',
         ssid: '',
+        selected: '',
         password: ''
       }
     },

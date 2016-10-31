@@ -9,12 +9,13 @@
           <p class="control" v-bind:class="{'is-loading': loading}">
               <span class="select">
                 <select v-model="selected">
+                    <!--<option value="" disabled ssid hidden>Please Choose</option>-->
                     <option v-for="(val, idx) in access_points">
                       {{ val.name }}
                     </option>
                 </select>
               </span>
-            <a class="button" v-bind:class="{ 'is-loading': loading}">
+            <a class="button" v-bind:class="{ 'is-loading': loading}" v-on:click="onRefresh">
                 <span class="icon is-small">
                   <i class="fa fa-refresh"></i>
                 </span>
@@ -45,6 +46,9 @@
     components: {},
     props: {},
     methods: {
+      onRefresh () {
+        this.reload()
+      },
       onSubmit () {
         let context = this
         saveWiFiConfig(context, '..@  PCS Staff', '@PinnStaff')
@@ -59,35 +63,37 @@
           aps.forEach((ap, k) => {
             this.map.set(ap.name, ap)
           })
+          this.access_points = []
+          for (let [key, value] of this.map) {
+            this.access_points.push(value)
+            this.loading = false
+            this.ssid = this.access_points[0].name
+          }
         })
       }
-
     },
     data () {
       return {
         loading: true,
         access_points: [],
-        selected: null
+        ssid: null
       }
     },
-
+    computed: {
+      now: function () {
+        return Date.now()
+      }
+    },
+    created () {
+      this.map = new Map()
+      this.reload = () => {
+        this.loading = true
+        this.fetchAPs()
+      }
+    },
     mounted () {
       console.log('mounted')
-      this.map = new Map()
-      this.counter = 0
-      this.loading = true
-      const _interval = setInterval(() => {
-        console.log('=>', this.fetchAPs())
-        if (this.counter++ === 3) {
-          clearInterval(_interval)
-          console.log(this.map)
-          for (let [key, value] of this.map) {
-            console.log(key, value)
-            this.access_points.push(value)
-            this.loading = false
-          }
-        }
-      }, 1000)
+      this.reload()
     }
   }
 </script>
