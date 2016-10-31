@@ -6,9 +6,13 @@
           <div class="heading">
             <h1 class="title">STA Configuration</h1>
           </div>
+          <div v-if="server_response" class="notification is-primary">
+            <!--<button class="delete"></button>-->
+            {{ server_response }}
+          </div>
           <p class="control" v-bind:class="{'is-loading': loading}">
               <span class="select">
-                <select v-model="selected">
+                <select v-model="ssid">
                     <!--<option value="" disabled ssid hidden>Please Choose</option>-->
                     <option v-for="(val, idx) in access_points">
                       {{ val.name }}
@@ -25,13 +29,11 @@
           <!--<p class="control">APS: {{ access_points }}</p>-->
           <label class="label">Password</label>
           <p class="control has-icon">
-            <input class="input" type="password" placeholder="Password">
+            <input v-model="password" class="input" type="text" placeholder="Password">
             <i class="fa fa-lock"></i>
           </p>
           <p class="control">
-            <button v-bind:class="{'is-disabled': loading}" class="button is-primary"
-                    v-on:click="onSubmit">Submit
-            </button>
+            <button v-bind:class="{'is-loading': saving, 'is-disabled': loading||saving}" class="button is-primary" v-on:click="onSubmit">Submit </button>
             <button class="button is-link">Cancel</button>
           </p>
         </div>
@@ -47,14 +49,22 @@
     props: {},
     methods: {
       onRefresh () {
+        console.log('on refresh')
         this.reload()
       },
       onSubmit () {
         let context = this
-        saveWiFiConfig(context, '..@  PCS Staff', '@PinnStaff')
+        this.saving = true
+        saveWiFiConfig(context, context.ssid, context.password)
           .then((resp) => resp.json())
           .then((json) => {
             console.log(json)
+            this.server_response = JSON.stringify(json)
+            this.saving = false
+          })
+          .catch((err) => {
+            this.saving = false
+            console.log(err)
           })
       },
       fetchAPs () {
@@ -65,6 +75,7 @@
           })
           this.access_points = []
           for (let [key, value] of this.map) {
+            console.log(key, value)
             this.access_points.push(value)
             this.loading = false
             this.ssid = this.access_points[0].name
@@ -74,9 +85,12 @@
     },
     data () {
       return {
+        server_response: null,
         loading: true,
+        saving: false,
         access_points: [],
-        ssid: null
+        ssid: null,
+        password: null
       }
     },
     computed: {
@@ -92,7 +106,6 @@
       }
     },
     mounted () {
-      console.log('mounted')
       this.reload()
     }
   }

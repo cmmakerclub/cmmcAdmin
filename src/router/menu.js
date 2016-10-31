@@ -51,6 +51,22 @@ export default [
     ]
   },
   {
+    name: 'Calibrations',
+    path: '/calibrate',
+    meta: {
+      icon: 'fa-sort',
+      expanded: false
+    },
+    component: require('../views/charts'),
+    children: [
+      {
+        name: 'DHT',
+        path: 'dht',
+        component: require('../views/calibrations/DHT')
+      }
+    ]
+  },
+  {
     name: 'OTA',
     path: '/ota',
     meta: {
