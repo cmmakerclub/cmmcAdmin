@@ -24,7 +24,7 @@
             <i class="fa fa-lock"></i>
           </p>
           <p class="control">
-            <button class="button is-primary">Submit</button>
+            <button class="button is-primary" v-on:click="onSubmit">Submit</button>
             <button class="button is-link">Cancel</button>
           </p>
         </div>
@@ -34,22 +34,31 @@
 </template>
 
 <script>
-  import {getAccessPoints} from '../../api'
+  import {saveWiFiConfig, getAccessPoints} from '../../api'
   export default {
     components: {},
-
     props: {},
-    data () {
-      getAccessPoints((err, post) => {
+    methods: {
+      onSubmit () {
+        let context = this
+        saveWiFiConfig(context, '..@  PCS Staff', '@PinnStaff')
+          .then((resp) => resp.json())
+          .then((json) => { console.log(json) })
+      },
+      fetchAPs () {
+        let context = this
         this.loading = true
-        if (err) {
-          console.log(err)
-        } else {
-          this.post = post
-        }
-      })
+        getAccessPoints(context).then((aps) => {
+          console.log(aps)
+          this.loading = false
+          this.access_points = aps
+        })
+      }
+
+    },
+    data () {
       return {
-        loading: false,
+        loading: true,
         access_points: {},
         selected: ''
       }
@@ -57,17 +66,7 @@
 
     mounted () {
       console.log('mounted')
-      setInterval(() => {
-        this.loading = true
-        getAccessPoints((err, aps) => {
-          if (err) {
-            console.log(err)
-          } else {
-            this.loading = false
-            this.access_points = aps
-          }
-        })
-      }, 5000)
+      console.log('=>', this.fetchAPs())
     }
   }
 </script>

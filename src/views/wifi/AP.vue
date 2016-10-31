@@ -8,16 +8,18 @@
           </div>
           <label class="label">AP</label>
           <p class="control has-icon">
-            <input class="input" placeholder="AP Name">
+            <input class="input" placeholder="AP Name" v-model="ssid">
             <i class="fa fa-wifi"></i>
+            {{ ssid }}
           </p>
           <label class="label">Password</label>
           <p class="control has-icon">
-            <input class="input" type="password" placeholder="Password">
+            <input class="input" type="text" placeholder="Password" v-model="password">
             <i class="fa fa-lock"></i>
+            {{ password }}
           </p>
           <p class="control">
-            <button class="button is-primary">Submit</button>
+            <button class="button is-primary" v-on:click="onSubmit">Submit</button>
             <button class="button is-link">Cancel</button>
           </p>
         </div>
@@ -27,31 +29,44 @@
 </template>
 
 <script>
-  import {getPost} from '../../api'
+  import {saveAPConfig, getAPConfig} from '../../api'
   export default {
     components: {},
 
     props: {},
 
+    methods: {
+      onSubmit () {
+        let context = this
+        saveAPConfig(context, context.ssid, context.password)
+        .then((resp) => resp.json())
+        .then((json) => {
+          console.log(json)
+        })
+        .catch((err) => {
+          console.log('error', err)
+        })
+      }
+    },
     data () {
-      console.log('data')
-      getPost(1, (err, post) => {
-        this.loading = true
-        if (err) {
-          console.log(err)
-        } else {
-          this.post = post
-        }
-      })
       return {
         loading: false,
         post: {},
-        selected: ''
+        selected: '',
+        ssid: '',
+        password: ''
       }
     },
 
     mounted () {
       console.log('mounted')
+      getAPConfig(this).then((json) => {
+        this.ssid = json.ssid
+        this.password = json.password
+      })
+      .catch((err) => {
+        console.log('error:', err)
+      })
     }
   }
 </script>
