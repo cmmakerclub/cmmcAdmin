@@ -6,25 +6,31 @@
           <div class="heading">
             <h1 class="title">STA Configuration</h1>
           </div>
-          <p class="control" v-bind:class="{ 'is-loading': loading}">
+          <p class="control" v-bind:class="{'is-loading': loading}">
               <span class="select">
                 <select v-model="selected">
-                    <option v-for="option in access_points" v-bind:value="option.name">
-                        {{ option.name }}
+                    <option v-for="(val, idx) in access_points">
+                      {{ val.name }}
                     </option>
                 </select>
-
               </span>
+            <a class="button" v-bind:class="{ 'is-loading': loading}">
+                <span class="icon is-small">
+                  <i class="fa fa-refresh"></i>
+                </span>
+              <span>Refresh</span>
+            </a>
           </p>
-          <p class="control">You Select: {{ selected }}</p>
-          <p class="control">APS: {{ access_points }}</p>
+          <!--<p class="control">APS: {{ access_points }}</p>-->
           <label class="label">Password</label>
           <p class="control has-icon">
             <input class="input" type="password" placeholder="Password">
             <i class="fa fa-lock"></i>
           </p>
           <p class="control">
-            <button class="button is-primary" v-on:click="onSubmit">Submit</button>
+            <button v-bind:class="{'is-disabled': loading}" class="button is-primary"
+                    v-on:click="onSubmit">Submit
+            </button>
             <button class="button is-link">Cancel</button>
           </p>
         </div>
@@ -43,15 +49,16 @@
         let context = this
         saveWiFiConfig(context, '..@  PCS Staff', '@PinnStaff')
           .then((resp) => resp.json())
-          .then((json) => { console.log(json) })
+          .then((json) => {
+            console.log(json)
+          })
       },
       fetchAPs () {
         let context = this
-        this.loading = true
         getAccessPoints(context).then((aps) => {
-          console.log(aps)
-          this.loading = false
-          this.access_points = aps
+          aps.forEach((ap, k) => {
+            this.map.set(ap.name, ap)
+          })
         })
       }
 
@@ -59,14 +66,28 @@
     data () {
       return {
         loading: true,
-        access_points: {},
-        selected: ''
+        access_points: [],
+        selected: null
       }
     },
 
     mounted () {
       console.log('mounted')
-      console.log('=>', this.fetchAPs())
+      this.map = new Map()
+      this.counter = 0
+      this.loading = true
+      const _interval = setInterval(() => {
+        console.log('=>', this.fetchAPs())
+        if (this.counter++ === 3) {
+          clearInterval(_interval)
+          console.log(this.map)
+          for (let [key, value] of this.map) {
+            console.log(key, value)
+            this.access_points.push(value)
+            this.loading = false
+          }
+        }
+      }, 1000)
     }
   }
 </script>
