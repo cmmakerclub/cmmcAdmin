@@ -38,7 +38,7 @@ export function getAccessPoints (context) {
     let fin = []
     let out = {}
     console.log('calling...')
-    context.$http.get('/api/wifi').then((response) => response.json())
+    context.$http.get('/api/wifi/scan').then((response) => response.json())
       .then((aps) => {
         list.push(aps)
         for (let _aps of list) {
