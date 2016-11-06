@@ -43,7 +43,7 @@ server.route(
 server.route(
   {
     method: ['GET'],
-    path:'/api/wifi',
+    path:'/api/wifi/scan',
     handler: function (request, reply) {
       let list = [
         [{name: 'Nat1'}, {name: ' ...@Pinn Creative Space 1'}],
