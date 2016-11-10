@@ -7,6 +7,9 @@
             <h1 class="title">AP Configuration</h1>
           </div>
           <label class="label">AP</label>
+          <div v-if="server_response" class="notification is-primary">
+            {{ server_response }}
+          </div>
           <p class="control has-icon">
             <input class="input" placeholder="AP Name" v-model="ssid">
             <i class="fa fa-wifi"></i>
@@ -39,9 +42,8 @@
       onSubmit () {
         let context = this
         saveAPConfig(context, context.ssid, context.password)
-        .then((resp) => resp.json())
-        .then((json) => {
-          console.log(json)
+        .then((resp) => {
+          this.server_response = resp
         })
         .catch((err) => {
           console.log('error', err)
@@ -50,6 +52,7 @@
     },
     data () {
       return {
+        server_response: null,
         loading: false,
         post: {},
         ssid: '',

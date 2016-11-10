@@ -7,7 +7,6 @@
             <h1 class="title">STA Configuration</h1>
           </div>
           <div v-if="server_response" class="notification is-primary">
-            <!--<button class="delete"></button>-->
             {{ server_response }}
           </div>
           <p class="control" v-bind:class="{'is-loading': loading}">
@@ -56,10 +55,8 @@
         let context = this
         this.saving = true
         saveWiFiConfig(context, context.ssid, context.password)
-          .then((resp) => resp.json())
-          .then((json) => {
-            console.log(json)
-            this.server_response = JSON.stringify(json)
+          .then((resp) => {
+            this.server_response = JSON.stringify(resp)
             this.saving = false
           })
           .catch((err) => {

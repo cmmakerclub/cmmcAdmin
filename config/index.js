@@ -21,7 +21,7 @@ module.exports = {
     port: 8080,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    // proxyTable: {} 
+    // proxyTable: {}
     proxyTable: { '/api': {
       target: 'http://localhost:8000',
       changeOrigin: true, // for vhosted sites, changes host header to match to target's host
