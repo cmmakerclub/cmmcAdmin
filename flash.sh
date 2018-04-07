@@ -9,6 +9,7 @@ pushd dist
 #EOF
 popd
 pushd ~/projects/NatRTCUserMemory/
+
 pio run -t uploadfs
 popd
 
