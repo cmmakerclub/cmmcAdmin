@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import menuModule from 'vuex-store/modules/menu'
+
+import menu from './menu'
+
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash', // Demo is living in GitHub.io, so required!
+  mode: 'hash',
   linkActiveClass: 'is-active',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
@@ -13,14 +15,13 @@ export default new Router({
       path: '/',
       component: require('../views/Home')
     },
-    ...generateRoutesFromMenu(menuModule.state.items),
+    ...generateRoutesFromMenu(menu),
     {
       path: '*',
-      redirect: '/'
+      redirect: '/wifi'
     }
   ]
 })
-
 // Menu should have 2 levels.
 function generateRoutesFromMenu (menu = [], routes = []) {
   for (let i = 0, l = menu.length; i < l; i++) {
